@@ -9,11 +9,11 @@ export default defineConfig(({ mode }) => {
     const branchType = env.VITE_BRANCH_TYPE || 'main';
     const basePaths = {
       main: '/ai-page-gen/',
-      english: '/ai-page-gen-english/',
+      english: '/ai-english-teaching-generator/',
       math: '/ai-page-gen-math/'
     };
     
-    const basePath = env.VITE_BASE_URL || basePaths[branchType as keyof typeof basePaths] || basePaths.main;
+    const basePath = env.VITE_BASE_URL || basePaths.english;
     
     return {
       define: {
