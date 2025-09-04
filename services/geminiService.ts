@@ -62,70 +62,115 @@ export const callGemini = async (prompt: string, apiKey: string): Promise<any> =
   }
 };
 
-// 1. 產生 learningObjectives
+// 1. 產生 learningObjectives - 專為英語教學優化
 const generateLearningObjectives = async (topic: string, apiKey: string): Promise<LearningObjectiveItem[]> => {
   const prompt = `
-    Please generate at least 3 (but more is better if appropriate) clear and distinct learning objectives for the topic: "${topic}".
-    The objectives should be based on scaffolding theory and gamification, and written in the primary language of the topic.
-    For each objective, provide the objective statement, a detailed description, and a concrete teaching example (such as a sample sentence, scenario, or application).
+    Please generate at least 4 (but more is better if appropriate) clear and distinct English learning objectives for the topic: "${topic}".
+    The objectives should be based on English language learning pedagogy, scaffolding theory, and communicative language teaching approaches.
+    Each objective should address different language skills (speaking, listening, reading, writing) and language components (vocabulary, grammar, pronunciation, culture) where applicable.
+    
+    For each objective, provide:
+    1. A clear objective statement in Traditional Chinese for Chinese-speaking teachers
+    2. A detailed pedagogical description explaining WHY this objective is important for English learners
+    3. A concrete, practical teaching example with English content and context
+    
     Output MUST be a valid JSON array of objects, e.g.:
     [
       { 
-        "objective": "能夠理解${topic}的基本概念", 
-        "description": "此目標幫助學習者建立對${topic}的基礎理解和認知框架...", 
-        "teachingExample": "透過具體例子展示${topic}的核心概念，例如..." 
+        "objective": "學生能夠掌握「${topic}」相關的核心詞彙並能在對話中正確使用", 
+        "description": "此目標幫助學習者建立「${topic}」主題的詞彙基礎，透過情境化學習提升詞彙的記憶和應用能力，同時培養在真實溝通中運用新詞彙的信心...", 
+        "teachingExample": "透過角色扮演活動，學生練習使用與「${topic}」相關的詞彙進行對話，例如：在討論日常生活時使用 'I usually...', 'Sometimes I...', 'I never...' 等表達..." 
       },
       { 
-        "objective": "能夠應用${topic}於實際情境", 
-        "description": "培養學習者將理論知識轉化為實際應用的能力...", 
-        "teachingExample": "提供真實情境讓學習者練習應用${topic}，如..." 
+        "objective": "學生能夠理解和運用與「${topic}」相關的基本語法結構", 
+        "description": "此目標著重於語法意識的培養，讓學習者不只是機械式記憶語法規則，而是理解語法在溝通中的功能和意義...", 
+        "teachingExample": "透過引導式發現學習，讓學生觀察「${topic}」相關文本中的語法模式，然後歸納規則並練習應用..." 
       },
       { 
-        "objective": "能夠辨識${topic}常見的誤區", 
-        "description": "幫助學習者識別和避免${topic}學習中的常見錯誤...", 
-        "teachingExample": "展示常見誤區的具體例子和正確理解方式..." 
+        "objective": "學生能夠聽懂和表達與「${topic}」相關的日常對話", 
+        "description": "此目標整合聽說技能，培養學習者在真實情境中的溝通能力，強調語言的實用性和流暢度...", 
+        "teachingExample": "設計模擬真實生活的對話練習，如購物、問路、介紹朋友等，讓學生練習聽懂並回應與「${topic}」相關的問題..." 
       },
-      //...or more items
+      { 
+        "objective": "學生能夠識別和避免「${topic}」學習中的常見語言錯誤", 
+        "description": "此目標幫助學習者發展語言意識，能夠自我修正並避免母語干擾造成的典型錯誤，提升語言準確性...", 
+        "teachingExample": "展示中文母語背景學習者在「${topic}」中的典型錯誤，如直接翻譯造成的語序問題，並提供正確的英語表達方式..." 
+      }
+      //...or more items focusing on different aspects of English learning
     ]
+    
+    IMPORTANT: Focus on English language learning principles:
+    1. Include vocabulary, grammar, pronunciation, and cultural aspects where relevant
+    2. Consider the four language skills: speaking, listening, reading, writing
+    3. Address common challenges for Chinese-speaking learners of English
+    4. Provide practical, classroom-ready teaching suggestions
+    5. Use specific English examples and scenarios
+    6. Consider different proficiency levels and learning styles
+    
     Do NOT include any explanation or extra text. Only output the JSON array.
   `;
   return await callGemini(prompt, apiKey);
 };
 
-// 2. 產生 contentBreakdown
+// 2. 產生 contentBreakdown - 專為英語教學優化
 const generateContentBreakdown = async (topic: string, apiKey: string, learningObjectives: LearningObjectiveItem[]): Promise<any[]> => {
-  // Detect if this is English language learning
-  const isEnglishLearning = /english|英語|英文|grammar|vocabulary|pronunciation|speaking|listening|reading|writing/i.test(topic);
-  
+  // 由於這是英文專用工具，所有主題都視為英語學習相關
   const prompt = `
-    Based on the following learning objectives: ${JSON.stringify(learningObjectives)}
-    Please break down the topic "${topic}" into at least 3 (but more is better if appropriate) micro-units. For each, provide a sub-topic, a brief explanation, and a concrete teaching example.
+    Based on the following English learning objectives: ${JSON.stringify(learningObjectives)}
+    Please break down the English learning topic "${topic}" into at least 4-5 comprehensive micro-units that cover different aspects of English language learning.
+    Each micro-unit should focus on a specific language skill or component (vocabulary, grammar, pronunciation, culture, communication strategies, etc.).
     
-    ${isEnglishLearning ? `
-    SPECIAL REQUIREMENTS FOR ENGLISH LEARNING TOPICS:
-    For each breakdown item, also include:
-    - coreConcept: 該要點的核心學習概念 (core learning concept for this point)
-    - teachingSentences: 3-5句教學例句 (array of 3-5 teaching example sentences)
-    - teachingTips: 教學要點提示與說明 (teaching tips and explanations)
+    REQUIREMENTS FOR ENGLISH LEARNING CONTENT BREAKDOWN:
+    For each breakdown item, provide:
+    - topic: 子主題名稱 (sub-topic name in Chinese for teachers)
+    - details: 詳細的教學內容說明 (detailed pedagogical explanation)
+    - teachingExample: 具體的課堂教學示例 (concrete classroom teaching example)
+    - coreConcept: 核心學習概念 (essential learning concept for this component)
+    - teachingSentences: 5-8 個英語教學例句或對話 (5-8 English teaching sentences or dialogues)
+    - teachingTips: 實用的教學技巧和注意事項 (practical teaching tips and important considerations)
     
-    Output format for English learning topics:
+    Output format:
     [
       {
-        "topic": "子主題A", 
-        "details": "子主題A的簡要說明...", 
-        "teachingExample": "子主題A的教學示例...",
-        "coreConcept": "此要點的核心概念...",
-        "teachingSentences": ["例句1", "例句2", "例句3", "例句4", "例句5"],
-        "teachingTips": "教學要點與提示說明..."
+        "topic": "詞彙建構與語境應用", 
+        "details": "此單元著重於「${topic}」相關詞彙的深度學習，不只是單純記憶，而是理解詞彙在不同語境中的使用方式，包括正式與非正式場合的詞彙選擇...", 
+        "teachingExample": "透過詞彙地圖(vocabulary mapping)活動，學生將新詞彙與已知概念連結，然後在小組討論中使用這些詞彙描述個人經驗...",
+        "coreConcept": "情境化詞彙學習與實際應用能力培養",
+        "teachingSentences": [
+          "When talking about ${topic}, we often use words like...",
+          "In formal situations, you might say..., but informally we say...",
+          "Let me give you an example: Yesterday I...",
+          "Can you think of another situation where you might use this word?",
+          "Practice using this word in your own sentence."
+        ],
+        "teachingTips": "重點在於讓學生理解詞彙的語境使用，避免直接翻譯，鼓勵學生透過英語思維來理解詞彙含義。建議使用圖片、手勢等視覺輔助工具..."
+      },
+      {
+        "topic": "語法結構與溝通功能", 
+        "details": "此單元專注於「${topic}」主題中常用的語法結構，強調語法的溝通功能而非純粹的規則記憶，讓學生理解為什麼在特定情況下使用特定的語法形式...", 
+        "teachingExample": "透過任務導向的活動，如規劃活動或解決問題，自然地引導學生使用目標語法結構，然後在活動後進行語法重點歸納...",
+        "coreConcept": "功能性語法教學與實用溝通技能",
+        "teachingSentences": [
+          "Notice how we use this structure to express...",
+          "In this context, the grammar helps us to...",
+          "Let's practice: If you want to..., you can say...",
+          "Compare these two sentences: What's the difference?",
+          "Now try making your own sentence using this pattern."
+        ],
+        "teachingTips": "避免過度的語法術語解釋，重點在於讓學生感受語法的實用性。使用引導式發現學習，讓學生自己歸納語法規則會更有效果..."
       }
+      // 繼續更多針對英語教學的微單元...
     ]
-    ` : `
-    Standard output format:
-    [
-      { "topic": "子主題A", "details": "子主題A的簡要說明...", "teachingExample": "子主題A的教學示例..." }
-    ]
-    `}
     
+    IMPORTANT: Each micro-unit should:
+    1. Address a specific aspect of English language learning
+    2. Provide culturally appropriate examples for Chinese-speaking learners
+    3. Include practical, immediately usable teaching strategies
+    4. Balance accuracy (correct English) with fluency (communication effectiveness)
+    5. Consider different learning styles and classroom management needs
+    6. Include authentic English usage examples
+    
+    Generate comprehensive content that English teachers can immediately implement in their classrooms.
     Do NOT include any explanation or extra text. Only output the JSON array.
   `;
   return await callGemini(prompt, apiKey);
@@ -491,58 +536,77 @@ const generateEnglishConversationForLevel = async (topic: string, selectedLevel:
   return await callGemini(prompt, apiKey);
 };
 
-// 7. 產生 learningLevels (學習程度建議)
+// 7. 產生 learningLevels (學習程度建議) - 專為英文教學優化
 const generateLearningLevels = async (topic: string, apiKey: string, learningObjectives: LearningObjectiveItem[]): Promise<LearningLevelSuggestions> => {
   const prompt = `
-    Based on the topic "${topic}" and learning objectives: ${JSON.stringify(learningObjectives)}
-    Please generate 3-4 learning levels that are specific to this topic. Each level should have a unique name, description, and order.
-    The levels should progress from basic understanding to advanced mastery, tailored specifically to the subject matter.
+    Based on the English learning topic "${topic}" and learning objectives: ${JSON.stringify(learningObjectives)}
+    Please generate 3-4 English learning levels that are specific to this topic, following English language learning progression standards (like CEFR where applicable).
+    Each level should have a unique name, description, and order that reflects English language proficiency development.
     
     Output MUST be a valid JSON object with this exact structure:
     {
       "suggestedLevels": [
         {
           "id": "beginner",
-          "name": "初學者",
-          "description": "適合首次接觸${topic}的學習者，著重基礎概念理解",
+          "name": "初級英語學習者",
+          "description": "適合英語基礎較弱或初次學習「${topic}」的學生，著重基本詞彙和簡單句型的理解與運用",
           "order": 1
         },
         {
           "id": "intermediate", 
-          "name": "進階者",
-          "description": "已具備基礎知識，能進行${topic}的實際應用",
+          "name": "中級英語學習者",
+          "description": "已具備基本英語能力，能夠在「${topic}」主題下進行中等複雜度的溝通和理解",
           "order": 2
         },
         {
           "id": "advanced",
-          "name": "專精者", 
-          "description": "深度掌握${topic}，能分析複雜情況並提供解決方案",
+          "name": "進階英語學習者", 
+          "description": "具有良好的英語基礎，能夠深入學習「${topic}」並進行較複雜的表達和討論",
           "order": 3
+        },
+        {
+          "id": "proficient",
+          "name": "英語精通者",
+          "description": "英語能力接近母語水準，能夠在「${topic}」領域進行專業級的溝通、分析和創作",
+          "order": 4
         }
       ],
-      "defaultLevelId": "beginner"
+      "defaultLevelId": "intermediate"
     }
     
-    Make sure to:
-    1. Create level names and descriptions that are specific to the topic (not generic)
-    2. Use appropriate terminology for the subject area
-    3. Ensure descriptions explain what learners at each level can do
-    4. Use the primary language of the topic for names and descriptions
+    IMPORTANT Guidelines for English Learning Levels:
+    1. Consider vocabulary complexity appropriate for each level
+    2. Factor in grammar structures students can handle at each stage
+    3. Include cultural and contextual understanding requirements
+    4. Ensure progression reflects real English learning milestones
+    5. Use specific English learning terminology where appropriate
+    6. Consider speaking, listening, reading, and writing skills development
+    
+    Make level descriptions specific to English language learning progression, not just general learning concepts.
+    Use Traditional Chinese for descriptions to help Chinese-speaking teachers understand the distinctions.
     
     Do NOT include any explanation or extra text. Only output the JSON object.
   `;
   return await callGemini(prompt, apiKey);
 };
 
-// 檢測主題是否為英語相關
+// 檢測主題是否為英語相關 - 已改為英文專用工具，因此所有主題都視為英語相關
 export const isEnglishRelatedTopic = (topic: string): boolean => {
+  // 由於這是專門的英文教學工具，所有主題都視為英語相關
+  // 但我們仍然保留這個函數以維持兼容性
+  return true; // 強制返回 true
+  
+  // 備用：如果需要更精確的英語主題檢測，可以使用以下邏輯
   const englishKeywords = [
     'english', 'grammar', 'vocabulary', 'pronunciation', 'speaking', 'writing', 'reading', 'listening',
     'conversation', 'toefl', 'ielts', 'toeic', 'english literature', 'business english', 'academic english',
     'phrasal verbs', 'idioms', 'prepositions', 'tenses', 'articles', 'adjectives', 'adverbs', 'nouns', 'verbs',
     '英語', '英文', '文法', '單字', '發音', '口說', '寫作', '閱讀', '聽力', 
     '對話', '會話', '托福', '雅思', '多益', '商業英文', '學術英文',
-    '片語動詞', '慣用語', '介系詞', '時態', '冠詞', '形容詞', '副詞', '名詞', '動詞'
+    '片語動詞', '慣用語', '介系詞', '時態', '冠詞', '形容詞', '副詞', '名詞', '動詞',
+    // 新增更多英語教學相關關鍵字
+    'cefr', 'cambridge', 'oxford', 'phonics', 'spelling', 'dictation', 'role play', 'drama',
+    'storytelling', 'debate', 'presentation', 'essay', 'poetry', 'literature', 'culture'
   ];
   
   const topicLower = topic.toLowerCase();

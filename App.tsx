@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { ExtendedLearningContent, LearningLevelSuggestions, LearningLevel, VocabularyLevel } from './types';
+import { ExtendedLearningContent, LearningLevelSuggestions, LearningLevel, VocabularyLevel, GeneratedLearningContent, StoredLessonPlan } from './types';
 import { generateLearningPlan, generateLearningLevelSuggestions, generateLearningPlanWithLevel, generateLearningPlanWithVocabularyLevel, isEnglishRelatedTopic } from './services/geminiService';
 import InputBar from './components/InputBar';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -391,19 +391,21 @@ const App: React.FC = () => {
           <div className="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-indigo-100 py-8 px-4 sm:px-6 lg:px-8">
             <ApiKeyModal isOpen={showApiKeyModal} onSave={handleSaveApiKey} />
             <header className="text-center mb-10">
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-sky-700 tracking-tight">
-                AI 學習頁面 <span className="text-indigo-600">產生器</span>
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-600 tracking-tight">
+                AI 英文教學 <span className="text-green-600">產生器</span>
               </h1>
               <p className="mt-3 text-lg text-slate-600 max-w-2xl mx-auto">
-                輸入一個主題，讓 AI 為您打造包含互動測驗的結構化學習計劃！
+                專為英文教師設計！輸入英文教學主題，AI 將為您創造完整的教案、測驗和會話練習！
               </p>
-              <div className="mt-6 max-w-2xl mx-auto bg-yellow-50 border-l-4 border-yellow-400 rounded-lg p-4 text-left shadow-sm">
+              <div className="mt-6 max-w-2xl mx-auto bg-blue-50 border-l-4 border-blue-400 rounded-lg p-4 text-left shadow-sm">
                 <div className="flex items-start mb-2">
-                  <svg className="w-6 h-6 text-yellow-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
-                  <span className="font-semibold text-yellow-800 text-base">使用注意事項</span>
+                  <svg className="w-6 h-6 text-blue-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
+                  <span className="font-semibold text-blue-800 text-base">英文教學專業提醒</span>
                 </div>
-                <ul className="list-disc pl-8 text-yellow-900 text-sm space-y-1">
-                  <li>內容審查：請在分享AI生成內容給學生前仔細檢查，確保內容適合且無誤</li>
+                <ul className="list-disc pl-8 text-blue-900 text-sm space-y-1">
+                  <li>教材品質：AI生成的英文教案建議先由教師檢視語法正確性和文化適宜性</li>
+                  <li>程度設定：系統已針對不同英文程度優化，請選擇符合學生能力的設定</li>
+                  <li>會話練習：支援語音辨識功能，可進行真實的英文對話訓練</li>
                   <li>隱私保護：請勿輸入學生個人識別資訊</li>
                 </ul>
               </div>
@@ -424,7 +426,7 @@ const App: React.FC = () => {
                   className="flex items-center gap-2 px-4 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-lg"
                 >
                   <AcademicCapIcon className="w-5 h-5" />
-                  我的教案庫
+                  英文教案庫
                 </a>
                 <a 
                   href={`${import.meta.env.BASE_URL}conversation-prep`}
@@ -433,7 +435,7 @@ const App: React.FC = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
                   </svg>
-                  英文對話練習
+                  會話練習產生
                 </a>
                 <button
                   onClick={handleShareLink}
@@ -442,7 +444,7 @@ const App: React.FC = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-11.314a2.25 2.25 0 1 0 3.935-2.186 2.25 2.25 0 0 0-3.935 2.186Z" />
                   </svg>
-                  分享應用程式
+                  分享教學工具
                 </button>
               </div>
               {copySuccess && (
@@ -512,7 +514,7 @@ const App: React.FC = () => {
 
             <footer className="text-center mt-12 py-6 border-t border-slate-300">
               <p className="text-sm text-slate-500">
-                由 Gemini API 驅動。AI 設計，為學習而生。
+                由 Gemini API 驅動。AI 智慧，專為英文教學而設計。
               </p>
               <button
                 className="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow transition"

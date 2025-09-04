@@ -27,7 +27,7 @@ const InputBar: React.FC<InputBarProps> = ({ topic, setTopic, onGenerate, onGene
   return (
     <form onSubmit={handleSubmit} className="mb-8 p-6 bg-white shadow-lg rounded-xl">
       <label htmlFor="topic-input" className="block text-xl font-semibold text-slate-700 mb-3">
-        輸入學習主題
+        輸入英文教學主題
       </label>
       <div className="flex flex-col space-y-3">
         <input
@@ -35,10 +35,10 @@ const InputBar: React.FC<InputBarProps> = ({ topic, setTopic, onGenerate, onGene
           type="text"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          placeholder="例如：光合作用、JavaScript Promises、法國大革命"
+          placeholder="例如：Past Tense、Travel Vocabulary、Daily Routines、Business Presentation Skills"
           className="w-full p-3 border border-slate-400 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition-shadow bg-slate-50 text-slate-800 placeholder-slate-500"
           disabled={isLoading}
-          aria-label="學習主題輸入欄位"
+          aria-label="英文教學主題輸入欄位"
         />
         
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
@@ -58,7 +58,7 @@ const InputBar: React.FC<InputBarProps> = ({ topic, setTopic, onGenerate, onGene
                   產生中...
                 </>
               ) : (
-                '🎯 選擇程度後產生'
+                '🎯 選擇英語程度後產生'
               )}
             </button>
           )}
@@ -78,15 +78,15 @@ const InputBar: React.FC<InputBarProps> = ({ topic, setTopic, onGenerate, onGene
                 產生中...
               </>
             ) : (
-              '⚡ 直接產生內容'
+              '⚡ 直接產生英文教案'
             )}
           </button>
         </div>
         
         {onGenerateWithLevels && (
-          <div className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
-            <p><strong>🎯 選擇程度後產生：</strong> 先獲得學習程度建議，選擇合適程度後產生針對性內容</p>
-            <p><strong>⚡ 直接產生內容：</strong> 立即產生包含所有程度的完整學習內容</p>
+          <div className="text-sm text-slate-600 bg-blue-50 p-3 rounded-lg border-l-4 border-blue-200">
+            <p><strong>🎯 選擇英語程度後產生：</strong> 先獲得針對該主題的英語學習程度建議，選擇適合的程度後產生專門化內容（推薦）</p>
+            <p><strong>⚡ 直接產生英文教案：</strong> 立即產生包含多個英語程度的完整教學方案</p>
           </div>
         )}
       </div>
